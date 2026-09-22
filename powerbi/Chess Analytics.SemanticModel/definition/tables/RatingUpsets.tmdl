@@ -1,0 +1,71 @@
+table RatingUpsets
+	lineageTag: 086c6785-3cdd-43a8-b873-b8994623c731
+
+	measure 'Eligible Games' = SUM(RatingUpsets[eligible_games])
+		formatString: #,0
+		lineageTag: 45019ea1-6808-41b9-841c-4db21b7728f8
+
+	measure 'Upset Games' = SUM(RatingUpsets[upset_games])
+		formatString: #,0
+		lineageTag: 60c9a943-50a8-4d32-a891-fb75916fdf6d
+
+	measure 'Upset Rate' = DIVIDE([Upset Games], [Eligible Games])
+		formatString: 0.00%
+		lineageTag: d9bd3cb5-b163-40ec-b783-5de1b409f37a
+
+	column speed_category
+		dataType: string
+		lineageTag: 41252a8c-2730-4e75-9733-7c7b027701e6
+		summarizeBy: none
+		sourceColumn: speed_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column rating_gap_band
+		dataType: string
+		lineageTag: fa1a734f-bdfb-47fc-8806-70766d613d4c
+		summarizeBy: none
+		sourceColumn: rating_gap_band
+
+		annotation SummarizationSetBy = Automatic
+
+	column lower_rated_player_band
+		dataType: string
+		lineageTag: 2da31cf3-dcfb-487f-a3f0-98382a66ed21
+		summarizeBy: none
+		sourceColumn: lower_rated_player_band
+
+		annotation SummarizationSetBy = Automatic
+
+	column eligible_games
+		dataType: int64
+		formatString: 0
+		lineageTag: 2609423b-af70-43bf-ac17-02ad7a9b9602
+		summarizeBy: sum
+		sourceColumn: eligible_games
+
+		annotation SummarizationSetBy = Automatic
+
+	column upset_games
+		dataType: int64
+		formatString: 0
+		lineageTag: b8499ff3-7b95-4e66-b335-ea7e9a03370d
+		summarizeBy: sum
+		sourceColumn: upset_games
+
+		annotation SummarizationSetBy = Automatic
+
+	partition RatingUpsets = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("E:\Chess-Analytics\data\exports\powerbi\rating_upsets_powerbi.csv"),[Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"speed_category", type text}, {"rating_gap_band", type text}, {"lower_rated_player_band", type text}, {"eligible_games", Int64.Type}, {"upset_games", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

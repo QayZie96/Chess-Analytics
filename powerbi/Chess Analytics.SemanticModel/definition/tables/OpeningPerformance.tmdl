@@ -1,0 +1,125 @@
+table OpeningPerformance
+	lineageTag: 6c986a28-b079-474d-98e5-978ca7e9b7ac
+
+	measure 'Player-Side Games' = SUM(OpeningPerformance[games])
+		formatString: #,0
+		lineageTag: 9bba6ff7-d331-4776-bec8-fc8ae57a92f4
+
+	measure 'Opening Wins' = SUM(OpeningPerformance[wins])
+		formatString: #,0
+		lineageTag: 02734a56-46b6-48d1-826a-7a84c3047f7f
+
+	measure 'Opening Draws' = SUM(OpeningPerformance[draws])
+		formatString: #,0
+		lineageTag: e381227e-2997-479c-aecd-c63b9e42f2b4
+
+	measure 'Opening Losses' = SUM(OpeningPerformance[losses])
+		formatString: #,0
+		lineageTag: ad7a7939-c040-4a49-9d05-d142f51fb276
+
+	measure 'Opening Win Rate' = DIVIDE([Opening Wins], [Player-Side Games])
+		formatString: 0.00%
+		lineageTag: 1ea970e7-7992-48f9-b56f-39ed46a1a5ea
+
+	measure 'Opening Draw Rate' = DIVIDE([Opening Draws], [Player-Side Games])
+		formatString: 0.00%
+		lineageTag: 0232e2a0-5b05-47b3-a421-c7f465b73486
+
+	measure 'Opening Loss Rate' = DIVIDE([Opening Losses], [Player-Side Games])
+		formatString: 0.00%
+		lineageTag: 0d941327-1fd5-480a-9121-28fdd40cb6bb
+
+	measure 'Opening Sample Eligible' = IF([Player-Side Games] >= 100, 1, 0)
+		formatString: 0
+		lineageTag: 8c27a7ba-ab8a-40ec-ad79-07d1da8b8ce1
+
+	column opening_name
+		dataType: string
+		lineageTag: c0e171fb-dce8-41bd-9c83-a304d4b84867
+		summarizeBy: none
+		sourceColumn: opening_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column eco_code
+		dataType: string
+		lineageTag: dc45bd62-4f16-4f3e-94f7-0d23de4e4a3e
+		summarizeBy: none
+		sourceColumn: eco_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column rating_band
+		dataType: string
+		lineageTag: a95e73cd-99cf-48f2-848e-27894051d0ab
+		summarizeBy: none
+		sourceColumn: rating_band
+
+		annotation SummarizationSetBy = Automatic
+
+	column player_color
+		dataType: string
+		lineageTag: 8762ce56-050a-4640-bbd1-6e5c19c18a89
+		summarizeBy: none
+		sourceColumn: player_color
+
+		annotation SummarizationSetBy = Automatic
+
+	column speed_category
+		dataType: string
+		lineageTag: 98008247-3167-4902-be9d-09bb79d8f7b8
+		summarizeBy: none
+		sourceColumn: speed_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column games
+		dataType: int64
+		formatString: 0
+		lineageTag: fa35108c-5360-467a-854c-a1936f32f079
+		summarizeBy: sum
+		sourceColumn: games
+
+		annotation SummarizationSetBy = Automatic
+
+	column wins
+		dataType: int64
+		formatString: 0
+		lineageTag: e7000e52-de4d-4983-be80-eded95937875
+		summarizeBy: sum
+		sourceColumn: wins
+
+		annotation SummarizationSetBy = Automatic
+
+	column draws
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d5c640a-41bd-4c81-bf6d-8c1fb3a5092e
+		summarizeBy: sum
+		sourceColumn: draws
+
+		annotation SummarizationSetBy = Automatic
+
+	column losses
+		dataType: int64
+		formatString: 0
+		lineageTag: ba5c93f2-e180-4edc-a94d-52363548f5cd
+		summarizeBy: sum
+		sourceColumn: losses
+
+		annotation SummarizationSetBy = Automatic
+
+	partition OpeningPerformance = m
+		mode: import
+		source =
+				let
+				    CsvSource = Csv.Document(File.Contents("E:\Chess-Analytics\data\exports\powerbi\opening_performance_powerbi.csv"),[Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    PromotedHeaders = Table.PromoteHeaders(CsvSource, [PromoteAllScalars=true]),
+				    TypedColumns = Table.TransformColumnTypes(PromotedHeaders,{{"opening_name", type text}, {"eco_code", type text}, {"rating_band", type text}, {"player_color", type text}, {"speed_category", type text}, {"games", Int64.Type}, {"wins", Int64.Type}, {"draws", Int64.Type}, {"losses", Int64.Type}})
+				in
+				    TypedColumns
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
