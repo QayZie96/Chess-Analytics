@@ -3,10 +3,10 @@
   "name": "20000000000000000012",
   "position": {
     "x": 56,
-    "y": 424,
+    "y": 440,
     "z": 12,
-    "width": 624,
-    "height": 336,
+    "width": 608,
+    "height": 512,
     "tabOrder": 12
   },
   "visual": {
@@ -145,6 +145,17 @@
                   "Value": "true"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F4F7FB'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -156,6 +167,17 @@
               "expr": {
                 "Literal": {
                   "Value": "'TopCenter'"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F4F7FB'"
+                    }
+                  }
                 }
               }
             }
@@ -324,6 +346,19 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

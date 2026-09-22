@@ -3,10 +3,10 @@
   "name": "20000000000000000014",
   "position": {
     "x": 56,
-    "y": 904,
+    "y": 984,
     "z": 14,
     "width": 1816,
-    "height": 88,
+    "height": 64,
     "tabOrder": 14
   },
   "visual": {
@@ -22,7 +22,7 @@
                     "value": "Comparison rule: the table applies the 100 player-side-game minimum separately to every opening, rating band, player color and speed-category combination. These are player-side observations, not unique games; the 764,194 total is not a game count. Opening outcomes are descriptive associations, not causal effects.",
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "16px",
+                      "fontSize": "15px",
                       "color": "#B9C8D8"
                     }
                   }

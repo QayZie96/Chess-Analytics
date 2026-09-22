@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "20000000000000000013",
   "position": {
-    "x": 712,
-    "y": 424,
+    "x": 696,
+    "y": 440,
     "z": 13,
-    "width": 1160,
-    "height": 440,
+    "width": 1176,
+    "height": 512,
     "tabOrder": 13
   },
   "visual": {
@@ -28,20 +28,6 @@
               },
               "queryRef": "OpeningPerformance.opening_name",
               "nativeQueryRef": "opening_name"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "OpeningPerformance"
-                    }
-                  },
-                  "Property": "eco_code"
-                }
-              },
-              "queryRef": "OpeningPerformance.eco_code",
-              "nativeQueryRef": "eco_code"
             },
             {
               "field": {
@@ -255,6 +241,50 @@
             }
           }
         }
+      ],
+      "total": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1D496F'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "visualContainerObjects": {
@@ -355,6 +385,19 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

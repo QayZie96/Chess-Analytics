@@ -81,6 +81,7 @@ def container_style(title: str | None = None) -> dict:
         "background": [{"properties": {"show": literal("true"), "color": color(PANEL), "transparency": literal("0D")}}],
         "border": [{"properties": {"show": literal("true"), "color": color(BORDER), "width": literal("1D"), "radius": literal("8D")}}],
         "padding": padding(),
+        "visualHeader": [{"properties": {"show": literal("false")}}],
     }
     if title:
         style["title"] = [{"properties": {"text": literal(f"'{title}'"), "fontColor": color(LIGHT), "background": color(PANEL), "alignment": literal("'left'")}}]
@@ -114,10 +115,11 @@ def card(name: str, x: int, y: int, width: int, height: int, tab_order: int, tab
     return visual(name, x, y, width, height, tab_order, "cardVisual", {
         "query": {"queryState": {"Data": {"projections": [projection(measure(table, measure_name), query_ref, measure_name)]}}},
         "objects": {
-            "label": [{"properties": {"show": literal("true"), "text": literal(f"'{label}'"), "fontColor": color(MUTED)}, "selector": {"id": "default"}}],
-            "value": [{"properties": {"fontColor": color(LIGHT), "fontSize": literal("28D"), "bold": literal("true")}, "selector": {"id": "default"}}],
+            "label": [{"properties": {"show": literal("true"), "text": literal(f"'{label}'"), "fontColor": color(LIGHT), "fontSize": literal("13D")}, "selector": {"id": "default"}}],
+            "value": [{"properties": {"fontColor": color(LIGHT), "fontSize": literal("30D"), "bold": literal("true")}, "selector": {"id": "default"}}],
+            "fillCustom": [{"properties": {"fillColor": color(PANEL), "transparency": literal("0D")}, "selector": {"id": "default"}}],
             "outline": [{"properties": {"show": literal("false")}, "selector": {"id": "default"}}],
-            "accentBar": [{"properties": {"show": literal("true"), "color": color(accent)}, "selector": {"id": "default"}}],
+            "accentBar": [{"properties": {"show": literal("true"), "position": literal("'Left'"), "width": literal("4D"), "color": color(accent)}, "selector": {"id": "default"}}],
         },
         "visualContainerObjects": container_style(),
     })
@@ -128,13 +130,16 @@ def slicer(name: str, x: int, y: int, width: int, tab_order: int, table: str, fi
         "query": {"queryState": {"Values": {"projections": [projection(column(table, field_name), f"{table}.{field_name}", field_name)]}}},
         "objects": {
             "data": [{"properties": {"mode": literal("'Dropdown'")}}],
-            "header": [{"properties": {"show": literal("true"), "text": literal(f"'{label}'")}}],
+            "header": [{"properties": {"show": literal("true"), "text": literal(f"'{label}'"), "fontColor": color(LIGHT), "background": color(PANEL), "textSize": literal("11D")}}],
+            "items": [{"properties": {"fontColor": color(LIGHT), "background": color("#0B2442"), "textSize": literal("10D"), "padding": literal("4D")}}],
+            "dropdown": [{"properties": {"borderColor": color(CYAN), "borderRadius": literal("4D")}}],
+            "general": [{"properties": {"outlineColor": color(CYAN)}}],
         },
         "visualContainerObjects": container_style(),
     })
 
 
-def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, table: str, category: str, measure_name: str, title: str) -> dict:
+def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, table: str, category: str, measure_name: str, title: str, category_label: str) -> dict:
     query_ref = f"{table}.{measure_name}"
     return visual(name, x, y, width, height, tab_order, "clusteredColumnChart", {
         "query": {
@@ -142,13 +147,12 @@ def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, ta
                 "Category": {"projections": [projection(column(table, category), f"{table}.{category}", category)]},
                 "Y": {"projections": [projection(measure(table, measure_name), query_ref, measure_name)]},
             },
-            "sortDefinition": {"sort": [{"field": measure(table, measure_name), "direction": "Descending"}], "isDefaultSort": False},
         },
         "objects": {
             "dataPoint": [{"properties": {"fill": color(CYAN)}, "selector": {"metadata": query_ref}}],
-            "labels": [{"properties": {"show": literal("true")}}],
-            "categoryAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT)}}],
-            "valueAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "start": literal("0D")}}],
+            "labels": [{"properties": {"show": literal("true"), "color": color(LIGHT)}}],
+            "categoryAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "titleText": literal(f"'{category_label}'"), "show": literal("true")}}],
+            "valueAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "titleText": literal("'Observed upset rate'"), "start": literal("0D")}}],
         },
         "visualContainerObjects": container_style(title),
     })
@@ -164,8 +168,8 @@ def outcome_chart(name: str, x: int, y: int, width: int, height: int, tab_order:
         "query": {"queryState": {"Category": {"projections": [projection(column(table, "player_color"), f"{table}.player_color", "player_color")]}, "Y": {"projections": projections}}},
         "objects": {
             "dataPoint": points,
-            "labels": [{"properties": {"show": literal("true")}}],
-            "legend": [{"properties": {"position": literal("'TopCenter'")}}],
+            "labels": [{"properties": {"show": literal("true"), "color": color(LIGHT)}}],
+            "legend": [{"properties": {"position": literal("'TopCenter'"), "labelColor": color(LIGHT)}}],
             "categoryAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT)}}],
             "valueAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "start": literal("0D")}}],
         },
@@ -194,7 +198,8 @@ def qualified_opening_filter() -> dict:
 
 def opening_table(name: str, x: int, y: int, width: int, height: int, tab_order: int) -> dict:
     table = "OpeningPerformance"
-    cols = ["opening_name", "eco_code", "rating_band", "player_color", "speed_category"]
+    # Keep the operational comparison columns and rates visible without horizontal clipping.
+    cols = ["opening_name", "rating_band", "player_color", "speed_category"]
     measures = ["Player-Side Games", "Opening Win Rate", "Opening Draw Rate", "Opening Loss Rate"]
     values = [projection(column(table, col), f"{table}.{col}", col) for col in cols]
     values += [projection(measure(table, item), f"{table}.{item}", item) for item in measures]
@@ -203,6 +208,8 @@ def opening_table(name: str, x: int, y: int, width: int, height: int, tab_order:
         "objects": {
             "columnHeaders": [{"properties": {"fontColor": color(LIGHT), "backColor": color(PANEL_ALT), "autoSizeColumnWidth": literal("true"), "columnAdjustment": literal("'growToFit'")}}],
             "values": [{"properties": {"fontColorPrimary": color(LIGHT), "fontColorSecondary": color(LIGHT), "backColorPrimary": color(PANEL), "backColorSecondary": color("#0B2442")}}],
+            "total": [{"properties": {"show": literal("false")}}],
+            "grid": [{"properties": {"rowPadding": literal("8D"), "gridHorizontal": literal("true"), "gridHorizontalColor": color(BORDER)}}],
         },
         "visualContainerObjects": {**container_style("Openings meeting the 100 player-side-game requirement"), "stylePreset": [{"properties": {"name": literal("'None'")}}]},
     })
@@ -243,16 +250,16 @@ def build() -> None:
     upset_visuals = [
         textbox("10000000000000000001", 56, 32, 880, 52, 1, "Chess Analytics | Rating Upsets", "30px"),
         textbox("10000000000000000002", 56, 88, 1100, 32, 2, "500,000-game sample from the beginning of August 2026", "15px", MUTED),
-        card("10000000000000000003", 56, 152, 360, 144, 3, upset, "Eligible Games", "Eligible Games", CYAN),
-        card("10000000000000000004", 440, 152, 360, 144, 4, upset, "Upset Games", "Upset Games", ORANGE),
-        card("10000000000000000005", 824, 152, 360, 144, 5, upset, "Upset Rate", "Observed Upset Rate", ORANGE),
+        card("10000000000000000003", 56, 152, 360, 160, 3, upset, "Eligible Games", "Eligible Games", CYAN),
+        card("10000000000000000004", 440, 152, 360, 160, 4, upset, "Upset Games", "Upset Games", ORANGE),
+        card("10000000000000000005", 824, 152, 360, 160, 5, upset, "Upset Rate", "Observed Upset Rate", ORANGE),
         slicer("10000000000000000006", 1224, 152, 200, 6, upset, "speed_category", "Speed category"),
         slicer("10000000000000000007", 1448, 152, 200, 7, upset, "rating_gap_band", "Rating-gap band"),
         slicer("10000000000000000008", 1672, 152, 200, 8, upset, "lower_rated_player_band", "Lower-rated band"),
-        chart("10000000000000000009", 56, 336, 576, 352, 9, upset, "rating_gap_band", "Upset Rate", "Observed upset rate by rating-gap band"),
-        chart("10000000000000000010", 664, 336, 576, 352, 10, upset, "speed_category", "Upset Rate", "Observed upset rate by speed category"),
-        chart("10000000000000000011", 1272, 336, 600, 352, 11, upset, "lower_rated_player_band", "Upset Rate", "Observed upset rate by lower-rated player band"),
-        textbox("10000000000000000012", 56, 736, 1816, 120, 12, "Methodology: an upset is a win by the lower-rated player against an opponent rated at least 100 Elo higher. Draws remain in the eligible-game denominator. Rates are descriptive of this early-August sample, not all Lichess games.", "17px", MUTED),
+        chart("10000000000000000009", 56, 352, 576, 464, 9, upset, "rating_gap_band", "Upset Rate", "Observed upset rate by rating-gap band", "Rating-gap band"),
+        chart("10000000000000000010", 664, 352, 576, 464, 10, upset, "speed_category", "Upset Rate", "Observed upset rate by speed category", "Speed category"),
+        chart("10000000000000000011", 1272, 352, 600, 464, 11, upset, "lower_rated_player_band", "Upset Rate", "Observed upset rate by lower-rated player band", "Lower-rated player band"),
+        textbox("10000000000000000012", 56, 864, 1816, 112, 12, "Methodology: an upset is a win by the lower-rated player against an opponent rated at least 100 Elo higher. Draws remain in the eligible-game denominator. Rates are descriptive of this early-August sample, not all Lichess games.", "17px", MUTED),
     ]
     write_visuals(UPSET_PAGE, upset_visuals)
 
@@ -267,14 +274,14 @@ def build() -> None:
         slicer("20000000000000000004", 520, 144, 280, 4, opening, "rating_band", "Rating band"),
         slicer("20000000000000000005", 824, 144, 240, 5, opening, "player_color", "Player color"),
         slicer("20000000000000000006", 1088, 144, 260, 6, opening, "speed_category", "Speed category"),
-        card("20000000000000000007", 56, 256, 336, 128, 7, opening, "Player-Side Games", "Player-Side Games", CYAN),
-        card("20000000000000000008", 416, 256, 336, 128, 8, opening, "Opening Wins", "Opening Wins", ORANGE),
-        card("20000000000000000009", 776, 256, 336, 128, 9, opening, "Opening Draws", "Opening Draws", CYAN),
-        card("20000000000000000010", 1136, 256, 336, 128, 10, opening, "Opening Losses", "Opening Losses", "#8BA6C1"),
-        card("20000000000000000011", 1496, 256, 376, 128, 11, opening, "Opening Win Rate", "Observed Win Rate", ORANGE),
-        outcome_chart("20000000000000000012", 56, 424, 624, 336, 12),
-        opening_table("20000000000000000013", 712, 424, 1160, 440, 13),
-        textbox("20000000000000000014", 56, 904, 1816, 88, 14, "Comparison rule: the table applies the 100 player-side-game minimum separately to every opening, rating band, player color and speed-category combination. These are player-side observations, not unique games; the 764,194 total is not a game count. Opening outcomes are descriptive associations, not causal effects.", "16px", MUTED),
+        card("20000000000000000007", 56, 256, 336, 144, 7, opening, "Player-Side Games", "Player-Side Games", CYAN),
+        card("20000000000000000008", 416, 256, 336, 144, 8, opening, "Opening Wins", "Opening Wins", ORANGE),
+        card("20000000000000000009", 776, 256, 336, 144, 9, opening, "Opening Draws", "Opening Draws", CYAN),
+        card("20000000000000000010", 1136, 256, 336, 144, 10, opening, "Opening Losses", "Opening Losses", "#8BA6C1"),
+        card("20000000000000000011", 1496, 256, 376, 144, 11, opening, "Opening Win Rate", "Observed Win Rate", ORANGE),
+        outcome_chart("20000000000000000012", 56, 440, 608, 512, 12),
+        opening_table("20000000000000000013", 696, 440, 1176, 512, 13),
+        textbox("20000000000000000014", 56, 984, 1816, 64, 14, "Comparison rule: the table applies the 100 player-side-game minimum separately to every opening, rating band, player color and speed-category combination. These are player-side observations, not unique games; the 764,194 total is not a game count. Opening outcomes are descriptive associations, not causal effects.", "15px", MUTED),
     ]
     write_visuals(OPENING_PAGE, opening_visuals)
 

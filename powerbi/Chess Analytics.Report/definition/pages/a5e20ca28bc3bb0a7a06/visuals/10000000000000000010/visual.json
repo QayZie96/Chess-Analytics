@@ -3,10 +3,10 @@
   "name": "10000000000000000010",
   "position": {
     "x": 664,
-    "y": 336,
+    "y": 352,
     "z": 10,
     "width": 576,
-    "height": 352,
+    "height": 464,
     "tabOrder": 10
   },
   "visual": {
@@ -49,24 +49,6 @@
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "RatingUpsets"
-                  }
-                },
-                "Property": "Upset Rate"
-              }
-            },
-            "direction": "Descending"
-          }
-        ],
-        "isDefaultSort": false
       }
     },
     "objects": {
@@ -99,6 +81,17 @@
                   "Value": "true"
                 }
               }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F4F7FB'"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -127,6 +120,20 @@
                   }
                 }
               }
+            },
+            "titleText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Speed category'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
             }
           }
         }
@@ -153,6 +160,13 @@
                       "Value": "'#F4F7FB'"
                     }
                   }
+                }
+              }
+            },
+            "titleText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Observed upset rate'"
                 }
               }
             },
@@ -265,6 +279,19 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
