@@ -21,9 +21,9 @@
                   {
                     "value": "Chess Analytics | Opening Performance Explorer",
                     "textStyle": {
-                      "fontFamily": "Segoe UI Semibold",
+                      "fontFamily": "Inter",
                       "fontSize": "30px",
-                      "color": "#F4F7FB"
+                      "color": "#E8EEF5"
                     }
                   }
                 ],

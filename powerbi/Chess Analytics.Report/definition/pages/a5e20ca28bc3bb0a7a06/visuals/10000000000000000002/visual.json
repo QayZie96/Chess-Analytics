@@ -21,9 +21,9 @@
                   {
                     "value": "500,000-game sample from the beginning of August 2026",
                     "textStyle": {
-                      "fontFamily": "Segoe UI Semibold",
+                      "fontFamily": "Inter",
                       "fontSize": "15px",
-                      "color": "#B9C8D8"
+                      "color": "#A9BBCC"
                     }
                   }
                 ],

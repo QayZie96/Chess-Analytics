@@ -24,14 +24,19 @@ PAGE_SCHEMA = (
     "page/2.1.0/schema.json"
 )
 
-NAVY = "#071A33"
-PANEL = "#0E2B50"
-PANEL_ALT = "#12385F"
-LIGHT = "#F4F7FB"
-MUTED = "#B9C8D8"
-ORANGE = "#FF9F1C"
-CYAN = "#31C3D9"
-BORDER = "#1D496F"
+# Portfolio design tokens from konstantinoszafiropoulos.netlify.app.
+NAVY = "#050D18"
+PANEL = "#071522"
+PANEL_ALT = "#0A1928"
+LIGHT = "#E8EEF5"
+MUTED = "#A9BBCC"
+SUBTLE = "#71869A"
+ORANGE = "#FF8A00"
+CYAN = "#168DFF"
+BLUE_LIGHT = "#65BAFF"
+GREEN = "#26D5A2"
+BORDER = "#1D354A"
+FONT = "Inter"
 
 UPSET_PAGE = "a5e20ca28bc3bb0a7a06"
 OPENING_PAGE = "b4d8a1f2c6e793045b1a"
@@ -79,12 +84,12 @@ def padding(value: str = "8D") -> list[dict]:
 def container_style(title: str | None = None) -> dict:
     style = {
         "background": [{"properties": {"show": literal("true"), "color": color(PANEL), "transparency": literal("0D")}}],
-        "border": [{"properties": {"show": literal("true"), "color": color(BORDER), "width": literal("1D"), "radius": literal("8D")}}],
+        "border": [{"properties": {"show": literal("true"), "color": color(BORDER), "width": literal("1D"), "radius": literal("10D")}}],
         "padding": padding(),
         "visualHeader": [{"properties": {"show": literal("false")}}],
     }
     if title:
-        style["title"] = [{"properties": {"text": literal(f"'{title}'"), "fontColor": color(LIGHT), "background": color(PANEL), "alignment": literal("'left'")}}]
+        style["title"] = [{"properties": {"text": literal(f"'{title}'"), "fontColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'"), "background": color(PANEL), "alignment": literal("'left'")}}]
     return style
 
 
@@ -100,7 +105,7 @@ def visual(name: str, x: int, y: int, width: int, height: int, tab_order: int, v
 def textbox(name: str, x: int, y: int, width: int, height: int, tab_order: int, text: str, font_size: str, font_color: str = LIGHT) -> dict:
     return visual(name, x, y, width, height, tab_order, "textbox", {
         "objects": {
-            "general": [{"properties": {"paragraphs": [{"textRuns": [{"value": text, "textStyle": {"fontFamily": "Segoe UI Semibold", "fontSize": font_size, "color": font_color}}], "horizontalTextAlignment": "left"}]}}]
+            "general": [{"properties": {"paragraphs": [{"textRuns": [{"value": text, "textStyle": {"fontFamily": FONT, "fontSize": font_size, "color": font_color}}], "horizontalTextAlignment": "left"}]}}]
         },
         "visualContainerObjects": {
             "background": [{"properties": {"show": literal("false")}}],
@@ -115,8 +120,8 @@ def card(name: str, x: int, y: int, width: int, height: int, tab_order: int, tab
     return visual(name, x, y, width, height, tab_order, "cardVisual", {
         "query": {"queryState": {"Data": {"projections": [projection(measure(table, measure_name), query_ref, measure_name)]}}},
         "objects": {
-            "label": [{"properties": {"show": literal("true"), "text": literal(f"'{label}'"), "fontColor": color(LIGHT), "fontSize": literal("13D")}, "selector": {"id": "default"}}],
-            "value": [{"properties": {"fontColor": color(LIGHT), "fontSize": literal("30D"), "bold": literal("true")}, "selector": {"id": "default"}}],
+            "label": [{"properties": {"show": literal("true"), "text": literal(f"'{label}'"), "fontColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'"), "fontSize": literal("13D")}, "selector": {"id": "default"}}],
+            "value": [{"properties": {"fontColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'"), "fontSize": literal("30D"), "bold": literal("true")}, "selector": {"id": "default"}}],
             "fillCustom": [{"properties": {"fillColor": color(PANEL), "transparency": literal("0D")}, "selector": {"id": "default"}}],
             "outline": [{"properties": {"show": literal("false")}, "selector": {"id": "default"}}],
             "accentBar": [{"properties": {"show": literal("true"), "position": literal("'Left'"), "width": literal("4D"), "color": color(accent)}, "selector": {"id": "default"}}],
@@ -130,8 +135,8 @@ def slicer(name: str, x: int, y: int, width: int, tab_order: int, table: str, fi
         "query": {"queryState": {"Values": {"projections": [projection(column(table, field_name), f"{table}.{field_name}", field_name)]}}},
         "objects": {
             "data": [{"properties": {"mode": literal("'Dropdown'")}}],
-            "header": [{"properties": {"show": literal("true"), "text": literal(f"'{label}'"), "fontColor": color(LIGHT), "background": color(PANEL), "textSize": literal("11D")}}],
-            "items": [{"properties": {"fontColor": color(LIGHT), "background": color("#0B2442"), "textSize": literal("10D"), "padding": literal("4D")}}],
+            "header": [{"properties": {"show": literal("true"), "text": literal(f"'{label}'"), "fontColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'"), "background": color(PANEL), "textSize": literal("11D")}}],
+            "items": [{"properties": {"fontColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'"), "background": color(PANEL_ALT), "textSize": literal("10D"), "padding": literal("4D")}}],
             "dropdown": [{"properties": {"borderColor": color(CYAN), "borderRadius": literal("4D")}}],
             "general": [{"properties": {"outlineColor": color(CYAN)}}],
         },
@@ -151,8 +156,8 @@ def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, ta
         "objects": {
             "dataPoint": [{"properties": {"fill": color(CYAN)}, "selector": {"metadata": query_ref}}],
             "labels": [{"properties": {"show": literal("true"), "color": color(LIGHT)}}],
-            "categoryAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "titleText": literal(f"'{category_label}'"), "show": literal("true")}}],
-            "valueAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "titleText": literal("'Observed upset rate'"), "start": literal("0D")}}],
+            "categoryAxis": [{"properties": {"fontFamily": literal(f"'{FONT}'"), "labelColor": color(LIGHT), "titleColor": color(LIGHT), "titleText": literal(f"'{category_label}'"), "show": literal("true")}}],
+            "valueAxis": [{"properties": {"fontFamily": literal(f"'{FONT}'"), "labelColor": color(LIGHT), "titleColor": color(LIGHT), "titleText": literal("'Observed upset rate'"), "start": literal("0D")}}],
         },
         "visualContainerObjects": container_style(title),
     })
@@ -161,7 +166,7 @@ def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, ta
 def outcome_chart(name: str, x: int, y: int, width: int, height: int, tab_order: int) -> dict:
     table = "OpeningPerformance"
     measures = ["Opening Wins", "Opening Draws", "Opening Losses"]
-    colors = [ORANGE, CYAN, "#8BA6C1"]
+    colors = [ORANGE, CYAN, SUBTLE]
     projections = [projection(measure(table, item), f"{table}.{item}", item) for item in measures]
     points = [{"properties": {"fill": color(shade)}, "selector": {"metadata": f"{table}.{item}"}} for item, shade in zip(measures, colors)]
     return visual(name, x, y, width, height, tab_order, "clusteredColumnChart", {
@@ -169,9 +174,9 @@ def outcome_chart(name: str, x: int, y: int, width: int, height: int, tab_order:
         "objects": {
             "dataPoint": points,
             "labels": [{"properties": {"show": literal("true"), "color": color(LIGHT)}}],
-            "legend": [{"properties": {"position": literal("'TopCenter'"), "labelColor": color(LIGHT)}}],
-            "categoryAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT)}}],
-            "valueAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "start": literal("0D")}}],
+            "legend": [{"properties": {"position": literal("'TopCenter'"), "labelColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'")}}],
+            "categoryAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'")}}],
+            "valueAxis": [{"properties": {"labelColor": color(LIGHT), "titleColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'"), "start": literal("0D")}}],
         },
         "visualContainerObjects": container_style("Observed outcomes by player color"),
     })
@@ -206,8 +211,8 @@ def opening_table(name: str, x: int, y: int, width: int, height: int, tab_order:
     result = visual(name, x, y, width, height, tab_order, "tableEx", {
         "query": {"queryState": {"Values": {"projections": values}}, "sortDefinition": {"sort": [{"field": measure(table, "Player-Side Games"), "direction": "Descending"}], "isDefaultSort": False}},
         "objects": {
-            "columnHeaders": [{"properties": {"fontColor": color(LIGHT), "backColor": color(PANEL_ALT), "autoSizeColumnWidth": literal("true"), "columnAdjustment": literal("'growToFit'")}}],
-            "values": [{"properties": {"fontColorPrimary": color(LIGHT), "fontColorSecondary": color(LIGHT), "backColorPrimary": color(PANEL), "backColorSecondary": color("#0B2442")}}],
+            "columnHeaders": [{"properties": {"fontColor": color(LIGHT), "fontFamily": literal(f"'{FONT}'"), "backColor": color(PANEL_ALT), "autoSizeColumnWidth": literal("true"), "columnAdjustment": literal("'growToFit'")}}],
+            "values": [{"properties": {"fontColorPrimary": color(LIGHT), "fontColorSecondary": color(LIGHT), "fontFamily": literal(f"'{FONT}'"), "backColorPrimary": color(PANEL), "backColorSecondary": color(PANEL_ALT)}}],
             "total": [{"properties": {"show": literal("false")}}],
             "grid": [{"properties": {"rowPadding": literal("8D"), "gridHorizontal": literal("true"), "gridHorizontalColor": color(BORDER)}}],
         },

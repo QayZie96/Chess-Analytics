@@ -21,9 +21,9 @@
                   {
                     "value": "Player-side observations from comparable opponents in the beginning-of-August 2026 sample",
                     "textStyle": {
-                      "fontFamily": "Segoe UI Semibold",
+                      "fontFamily": "Inter",
                       "fontSize": "15px",
-                      "color": "#B9C8D8"
+                      "color": "#A9BBCC"
                     }
                   }
                 ],
