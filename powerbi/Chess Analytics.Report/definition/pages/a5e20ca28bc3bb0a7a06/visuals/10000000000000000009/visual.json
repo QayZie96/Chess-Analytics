@@ -5,8 +5,8 @@
     "x": 56,
     "y": 352,
     "z": 9,
-    "width": 576,
     "height": 464,
+    "width": 576,
     "tabOrder": 9
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "RatingUpsets.rating_gap_band",
-              "nativeQueryRef": "rating_gap_band"
+              "nativeQueryRef": "rating_gap_band",
+              "active": true
             }
           ]
         },

@@ -5,8 +5,8 @@
     "x": 520,
     "y": 144,
     "z": 4,
-    "width": 280,
     "height": 80,
+    "width": 280,
     "tabOrder": 4
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "OpeningPerformance.rating_band",
-              "nativeQueryRef": "rating_band"
+              "nativeQueryRef": "rating_band",
+              "active": true
             }
           ]
         }

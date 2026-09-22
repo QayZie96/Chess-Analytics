@@ -5,8 +5,8 @@
     "x": 1088,
     "y": 144,
     "z": 6,
-    "width": 260,
     "height": 80,
+    "width": 260,
     "tabOrder": 6
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "OpeningPerformance.speed_category",
-              "nativeQueryRef": "speed_category"
+              "nativeQueryRef": "speed_category",
+              "active": true
             }
           ]
         }

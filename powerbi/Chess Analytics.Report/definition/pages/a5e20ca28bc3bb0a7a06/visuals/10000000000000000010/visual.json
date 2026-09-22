@@ -5,8 +5,8 @@
     "x": 664,
     "y": 352,
     "z": 10,
-    "width": 576,
     "height": 464,
+    "width": 576,
     "tabOrder": 10
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "RatingUpsets.speed_category",
-              "nativeQueryRef": "speed_category"
+              "nativeQueryRef": "speed_category",
+              "active": true
             }
           ]
         },

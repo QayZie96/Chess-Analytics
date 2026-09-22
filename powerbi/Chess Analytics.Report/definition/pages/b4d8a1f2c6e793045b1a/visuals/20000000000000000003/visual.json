@@ -5,8 +5,8 @@
     "x": 56,
     "y": 144,
     "z": 3,
-    "width": 440,
     "height": 80,
+    "width": 440,
     "tabOrder": 3
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "OpeningPerformance.opening_name",
-              "nativeQueryRef": "opening_name"
+              "nativeQueryRef": "opening_name",
+              "active": true
             }
           ]
         }

@@ -5,8 +5,8 @@
     "x": 1672,
     "y": 152,
     "z": 8,
-    "width": 200,
     "height": 80,
+    "width": 200,
     "tabOrder": 8
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "RatingUpsets.lower_rated_player_band",
-              "nativeQueryRef": "lower_rated_player_band"
+              "nativeQueryRef": "lower_rated_player_band",
+              "active": true
             }
           ]
         }

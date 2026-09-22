@@ -5,8 +5,8 @@
     "x": 696,
     "y": 440,
     "z": 13,
-    "width": 1176,
     "height": 512,
+    "width": 1176,
     "tabOrder": 13
   },
   "visual": {
@@ -145,8 +145,7 @@
             },
             "direction": "Descending"
           }
-        ],
-        "isDefaultSort": false
+        ]
       }
     },
     "objects": {
@@ -258,15 +257,7 @@
       ],
       "total": [
         {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ],
       "grid": [

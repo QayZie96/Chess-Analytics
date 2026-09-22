@@ -5,8 +5,8 @@
     "x": 824,
     "y": 144,
     "z": 5,
-    "width": 240,
     "height": 80,
+    "width": 240,
     "tabOrder": 5
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "OpeningPerformance.player_color",
-              "nativeQueryRef": "player_color"
+              "nativeQueryRef": "player_color",
+              "active": true
             }
           ]
         }
