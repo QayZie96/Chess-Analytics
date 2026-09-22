@@ -34,8 +34,27 @@ table RatingUpsets
 		lineageTag: 2da31cf3-dcfb-487f-a3f0-98382a66ed21
 		summarizeBy: none
 		sourceColumn: lower_rated_player_band
+		sortByColumn: lower_rated_player_band_sort
 
 		annotation SummarizationSetBy = Automatic
+
+	// Hidden presentation-only key: preserves the intended Elo-band order in
+	// visuals and slicers without changing the CSV import or any calculation.
+	column lower_rated_player_band_sort =
+		SWITCH(
+			RatingUpsets[lower_rated_player_band],
+			"Below 800", 1,
+			"800-1199", 2,
+			"1200-1499", 3,
+			"1500-1799", 4,
+			"1800-2099", 5,
+			"2100+", 6,
+			99
+		)
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
 
 	column eligible_games
 		dataType: int64

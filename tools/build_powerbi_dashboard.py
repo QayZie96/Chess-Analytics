@@ -133,14 +133,6 @@ def card(name: str, x: int, y: int, width: int, height: int, tab_order: int, tab
     })
 
 
-def category_sort(table: str, field_name: str) -> dict:
-    """Return a deterministic ascending category sort for logical text bands."""
-    return {
-        "sort": [{"field": column(table, field_name), "direction": "Ascending"}],
-        "isDefaultSort": True,
-    }
-
-
 def slicer(name: str, x: int, y: int, width: int, tab_order: int, table: str, field_name: str, label: str) -> dict:
     return visual(name, x, y, width, 80, tab_order, "slicer", {
         "query": {"queryState": {"Values": {"projections": [projection(column(table, field_name), f"{table}.{field_name}", field_name)]}}},
@@ -155,7 +147,7 @@ def slicer(name: str, x: int, y: int, width: int, tab_order: int, table: str, fi
     })
 
 
-def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, table: str, category: str, measure_name: str, title: str, category_label: str, *, sort_categories: bool = False) -> dict:
+def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, table: str, category: str, measure_name: str, title: str, category_label: str) -> dict:
     query_ref = f"{table}.{measure_name}"
     query = {
             "queryState": {
@@ -163,8 +155,6 @@ def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, ta
                 "Y": {"projections": [projection(measure(table, measure_name), query_ref, measure_name)]},
             }
     }
-    if sort_categories:
-        query["sortDefinition"] = category_sort(table, category)
     return visual(name, x, y, width, height, tab_order, "clusteredColumnChart", {
         "query": query,
         "objects": {
@@ -283,9 +273,9 @@ def build() -> None:
         slicer("10000000000000000006", 1224, 152, 200, 6, upset, "speed_category", "Speed category"),
         slicer("10000000000000000007", 1448, 152, 200, 7, upset, "rating_gap_band", "Rating-gap band"),
         slicer("10000000000000000008", 1672, 152, 200, 8, upset, "lower_rated_player_band", "Lower-rated band"),
-        chart("10000000000000000009", 56, 352, 576, 464, 9, upset, "rating_gap_band", "Upset Rate", "Observed upset rate by rating-gap band", "Rating-gap band", sort_categories=True),
+        chart("10000000000000000009", 56, 352, 576, 464, 9, upset, "rating_gap_band", "Upset Rate", "Observed upset rate by rating-gap band", "Rating-gap band"),
         chart("10000000000000000010", 664, 352, 576, 464, 10, upset, "speed_category", "Upset Rate", "Observed upset rate by speed category", "Speed category"),
-        chart("10000000000000000011", 1272, 352, 600, 464, 11, upset, "lower_rated_player_band", "Upset Rate", "Observed upset rate by lower-rated player band", "Lower-rated player band", sort_categories=True),
+        chart("10000000000000000011", 1272, 352, 600, 464, 11, upset, "lower_rated_player_band", "Upset Rate", "Observed upset rate by lower-rated player band", "Lower-rated player band"),
         textbox("10000000000000000012", 56, 864, 1816, 112, 12, "Methodology: an upset is a win by the lower-rated player against an opponent rated at least 100 Elo higher. Draws remain in the eligible-game denominator. Rates are descriptive of this early-August sample, not all Lichess games.", "17px", MUTED),
     ]
     write_visuals(UPSET_PAGE, upset_visuals)
