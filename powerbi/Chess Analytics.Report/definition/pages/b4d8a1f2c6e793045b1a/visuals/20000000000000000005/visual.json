@@ -78,7 +78,7 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inter'"
+                  "Value": "'Segoe UI'"
                 }
               }
             },
@@ -120,7 +120,7 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inter'"
+                  "Value": "'Segoe UI'"
                 }
               }
             },

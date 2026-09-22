@@ -21,7 +21,7 @@
                   {
                     "value": "Methodology: an upset is a win by the lower-rated player against an opponent rated at least 100 Elo higher. Draws remain in the eligible-game denominator. Rates are descriptive of this early-August sample, not all Lichess games.",
                     "textStyle": {
-                      "fontFamily": "Inter",
+                      "fontFamily": "Segoe UI",
                       "fontSize": "17px",
                       "color": "#A9BBCC"
                     }

@@ -14,6 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "powerbi" / "Chess Analytics.Report" / "definition"
+REPORT_FILE = REPORT / "report.json"
 PAGES = REPORT / "pages"
 VISUAL_SCHEMA = (
     "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/"
@@ -36,7 +37,9 @@ CYAN = "#168DFF"
 BLUE_LIGHT = "#65BAFF"
 GREEN = "#26D5A2"
 BORDER = "#1D354A"
-FONT = "Inter"
+# PBIR requires a concrete installed font name.  CSS-style fallback stacks are
+# not supported here; Segoe UI is available with Power BI Desktop on Windows.
+FONT = "Segoe UI"
 
 UPSET_PAGE = "a5e20ca28bc3bb0a7a06"
 OPENING_PAGE = "b4d8a1f2c6e793045b1a"
@@ -130,6 +133,14 @@ def card(name: str, x: int, y: int, width: int, height: int, tab_order: int, tab
     })
 
 
+def category_sort(table: str, field_name: str) -> dict:
+    """Return a deterministic ascending category sort for logical text bands."""
+    return {
+        "sort": [{"field": column(table, field_name), "direction": "Ascending"}],
+        "isDefaultSort": True,
+    }
+
+
 def slicer(name: str, x: int, y: int, width: int, tab_order: int, table: str, field_name: str, label: str) -> dict:
     return visual(name, x, y, width, 80, tab_order, "slicer", {
         "query": {"queryState": {"Values": {"projections": [projection(column(table, field_name), f"{table}.{field_name}", field_name)]}}},
@@ -144,15 +155,18 @@ def slicer(name: str, x: int, y: int, width: int, tab_order: int, table: str, fi
     })
 
 
-def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, table: str, category: str, measure_name: str, title: str, category_label: str) -> dict:
+def chart(name: str, x: int, y: int, width: int, height: int, tab_order: int, table: str, category: str, measure_name: str, title: str, category_label: str, *, sort_categories: bool = False) -> dict:
     query_ref = f"{table}.{measure_name}"
-    return visual(name, x, y, width, height, tab_order, "clusteredColumnChart", {
-        "query": {
+    query = {
             "queryState": {
                 "Category": {"projections": [projection(column(table, category), f"{table}.{category}", category)]},
                 "Y": {"projections": [projection(measure(table, measure_name), query_ref, measure_name)]},
-            },
-        },
+            }
+    }
+    if sort_categories:
+        query["sortDefinition"] = category_sort(table, category)
+    return visual(name, x, y, width, height, tab_order, "clusteredColumnChart", {
+        "query": query,
         "objects": {
             "dataPoint": [{"properties": {"fill": color(CYAN)}, "selector": {"metadata": query_ref}}],
             "labels": [{"properties": {"show": literal("true"), "color": color(LIGHT)}}],
@@ -238,6 +252,13 @@ def page_definition(name: str, display_name: str) -> dict:
     }
 
 
+def update_report_settings() -> None:
+    """Keep report-level number display settings aligned with the KPI design."""
+    report = json.loads(REPORT_FILE.read_text(encoding="utf-8"))
+    report.setdefault("settings", {})["defaultDisplayUnitsToNone"] = True
+    REPORT_FILE.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+
+
 def write_visuals(page: str, visuals: list[dict]) -> None:
     visual_root = PAGES / page / "visuals"
     visual_root.mkdir(parents=True, exist_ok=True)
@@ -248,6 +269,7 @@ def write_visuals(page: str, visuals: list[dict]) -> None:
 
 
 def build() -> None:
+    update_report_settings()
     # Page 1: Rating Upsets.
     (PAGES / UPSET_PAGE).mkdir(parents=True, exist_ok=True)
     (PAGES / UPSET_PAGE / "page.json").write_text(json.dumps(page_definition(UPSET_PAGE, "Rating Upsets"), indent=2) + "\n", encoding="utf-8")
@@ -261,9 +283,9 @@ def build() -> None:
         slicer("10000000000000000006", 1224, 152, 200, 6, upset, "speed_category", "Speed category"),
         slicer("10000000000000000007", 1448, 152, 200, 7, upset, "rating_gap_band", "Rating-gap band"),
         slicer("10000000000000000008", 1672, 152, 200, 8, upset, "lower_rated_player_band", "Lower-rated band"),
-        chart("10000000000000000009", 56, 352, 576, 464, 9, upset, "rating_gap_band", "Upset Rate", "Observed upset rate by rating-gap band", "Rating-gap band"),
+        chart("10000000000000000009", 56, 352, 576, 464, 9, upset, "rating_gap_band", "Upset Rate", "Observed upset rate by rating-gap band", "Rating-gap band", sort_categories=True),
         chart("10000000000000000010", 664, 352, 576, 464, 10, upset, "speed_category", "Upset Rate", "Observed upset rate by speed category", "Speed category"),
-        chart("10000000000000000011", 1272, 352, 600, 464, 11, upset, "lower_rated_player_band", "Upset Rate", "Observed upset rate by lower-rated player band", "Lower-rated player band"),
+        chart("10000000000000000011", 1272, 352, 600, 464, 11, upset, "lower_rated_player_band", "Upset Rate", "Observed upset rate by lower-rated player band", "Lower-rated player band", sort_categories=True),
         textbox("10000000000000000012", 56, 864, 1816, 112, 12, "Methodology: an upset is a win by the lower-rated player against an opponent rated at least 100 Elo higher. Draws remain in the eligible-game denominator. Rates are descriptive of this early-August sample, not all Lichess games.", "17px", MUTED),
     ]
     write_visuals(UPSET_PAGE, upset_visuals)

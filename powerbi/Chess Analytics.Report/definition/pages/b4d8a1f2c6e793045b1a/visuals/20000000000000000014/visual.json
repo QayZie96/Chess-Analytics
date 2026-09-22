@@ -21,7 +21,7 @@
                   {
                     "value": "Comparison rule: the table applies the 100 player-side-game minimum separately to every opening, rating band, player color and speed-category combination. These are player-side observations, not unique games; the 764,194 total is not a game count. Opening outcomes are descriptive associations, not causal effects.",
                     "textStyle": {
-                      "fontFamily": "Inter",
+                      "fontFamily": "Segoe UI",
                       "fontSize": "15px",
                       "color": "#A9BBCC"
                     }

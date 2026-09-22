@@ -49,6 +49,24 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "RatingUpsets"
+                  }
+                },
+                "Property": "rating_gap_band"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
       }
     },
     "objects": {
@@ -102,7 +120,7 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inter'"
+                  "Value": "'Segoe UI'"
                 }
               }
             },
@@ -151,7 +169,7 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inter'"
+                  "Value": "'Segoe UI'"
                 }
               }
             },
@@ -336,7 +354,7 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Inter'"
+                  "Value": "'Segoe UI'"
                 }
               }
             },
